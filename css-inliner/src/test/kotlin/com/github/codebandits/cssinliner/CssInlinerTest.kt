@@ -1,3 +1,5 @@
+package com.github.codebandits.cssinliner
+
 import org.assertj.core.api.Assertions.assertThat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
