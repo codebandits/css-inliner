@@ -14,14 +14,14 @@ dependencies {
 data class GradlePlugin(val displayName: String, val id: String, val implementationClass: String)
 
 val plugin = GradlePlugin(
-        "CSS Inliner Gradle Plugin",
-        "com.github.codebandits.css-inliner",
-        "com.github.codebandits.cssinliner.CssInlinerPlugin"
+        displayName = "CSS Inliner Gradle Plugin",
+        id = "com.github.codebandits.css-inliner",
+        implementationClass = "com.github.codebandits.cssinliner.CssInlinerPlugin"
 )
 
 gradlePlugin {
     (plugins) {
-        plugin.id {
+        "cssInlinerGradlePlugin" {
             id = plugin.id
             implementationClass = plugin.implementationClass
         }
@@ -63,7 +63,7 @@ tasks {
     val publishDependenciesForTests by creating {
         dependsOn(":css-inliner:publishCssInlinerPublicationToTestRepository")
         dependsOn(":plugin:publishPluginMavenPublicationToTestRepository")
-        dependsOn(":plugin:publish${plugin.id.capitalize()}PluginMarkerMavenPublicationToTestRepository")
+        dependsOn(":plugin:publishCssInlinerGradlePluginPluginMarkerMavenPublicationToTestRepository")
     }
 
     "junitPlatformTest" {
