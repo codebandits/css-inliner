@@ -1,3 +1,5 @@
+package com.github.codebandits.cssinliner
+
 import com.steadystate.css.parser.CSSOMParser
 import com.steadystate.css.parser.SACParserCSS3
 import org.jsoup.Jsoup

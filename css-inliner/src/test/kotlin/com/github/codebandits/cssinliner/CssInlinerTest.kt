@@ -1,3 +1,5 @@
+package com.github.codebandits.cssinliner
+
 import org.assertj.core.api.Assertions.assertThat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -5,6 +7,8 @@ import org.jsoup.parser.Parser
 import org.junit.jupiter.api.Test
 
 class CssInlinerTest {
+
+    private val subject = CssInliner()
 
     @Test
     fun `should inline a single css rule`() {
@@ -22,8 +26,6 @@ class CssInlinerTest {
             </body>
             </html>
         """.trimIndent()
-
-        val subject = CssInliner()
 
         val result: String = subject.inlineCss(html, css)
 
@@ -54,8 +56,6 @@ class CssInlinerTest {
             </html>
         """.trimIndent()
 
-        val subject = CssInliner()
-
         val result: String = subject.inlineCss(html, css)
 
         val resultStyle = result.document
@@ -68,8 +68,6 @@ class CssInlinerTest {
     @Test
     fun `should preserve html fragments`() {
         val html = "<h1>hai</h1>"
-
-        val subject = CssInliner()
 
         val result: String = subject.inlineCss(html, "")
 
@@ -86,8 +84,6 @@ class CssInlinerTest {
             </body>
             </html>
         """.trimIndent()
-
-        val subject = CssInliner()
 
         val result: String = subject.inlineCss(html, "")
 
