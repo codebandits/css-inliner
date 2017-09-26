@@ -1,5 +1,6 @@
 package com.github.codebandits.cssinliner
 
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.invoke
@@ -24,5 +25,5 @@ open class CssInlinerPlugin : Plugin<Project> {
         }
     }
 
-    class CssFileMissing : RuntimeException("The cssFile configuration property must be set")
+    class CssFileMissing : GradleException("The cssFile configuration property must be set")
 }
