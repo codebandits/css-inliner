@@ -119,9 +119,7 @@ class CssInlinerPluginTest : BasePluginTest() {
                 id 'java'
             }
 
-            apply {
-                plugin 'com.github.codebandits.css-inliner'
-            }
+            apply plugin: 'com.github.codebandits.css-inliner'
 
             'css-inliner' {
                 cssFile = project.file('src/main/resources/style.css')
@@ -165,5 +163,88 @@ class CssInlinerPluginTest : BasePluginTest() {
 
         assertThat(result.outcomeOf(":processResources")).isEqualTo(TaskOutcome.FAILED)
         assertThat(result.output).contains("The cssFile configuration property must be set")
+    }
+
+    @Test
+    fun `should allow filesMatching to be configured`() {
+        withFile("build.gradle", """
+            buildscript {
+                repositories {
+                    maven { setUrl('$testRepository') }
+                    mavenCentral()
+                }
+                dependencies {
+                    classpath 'com.github.codebandits.css-inliner:com.github.codebandits.css-inliner.gradle.plugin:$version'
+                }
+            }
+
+            plugins {
+                id 'java'
+            }
+
+            apply {
+                plugin 'com.github.codebandits.css-inliner'
+            }
+
+            'css-inliner' {
+                cssFile = project.file('src/main/resources/style.css')
+                filesMatching = ['**/*.ftl']
+            }
+        """.trimIndent())
+
+        withFile("src/main/resources/people.ftl", """
+            [#list people as person]
+            <div class="fancy">${'$'}{person.name}</div>
+            [/#list]
+        """.trimIndent())
+
+        val result: BuildResult = build("processResources")
+
+        assertThat(result.outcomeOf(":processResources")).isEqualTo(TaskOutcome.SUCCESS)
+
+        val processedHtml = getFile("build/resources/main/people.ftl")
+        assertThat(processedHtml).doesNotContain("""<div class="fancy">""")
+        assertThat(processedHtml).contains("""<div style="font-style: italic;">""")
+    }
+
+    @Test
+    fun `should ignore files that are not configured to be processed`() {
+        withFile("build.gradle.kts", """
+            import com.github.codebandits.cssinliner.CssInlinerPluginExtension
+
+            buildscript {
+                repositories {
+                    maven { setUrl("$testRepository") }
+                    mavenCentral()
+                }
+                dependencies {
+                    classpath("com.github.codebandits.css-inliner:com.github.codebandits.css-inliner.gradle.plugin:$version")
+                }
+            }
+
+            plugins {
+                kotlin("jvm")
+            }
+
+            apply {
+                plugin("com.github.codebandits.css-inliner")
+            }
+
+            configure<CssInlinerPluginExtension> {
+                cssFile = project.file("src/main/resources/style.css")
+            }
+        """.trimIndent())
+
+        withFile("src/main/resources/bye", """
+            <div class="fancy">Goodbye</div>
+        """.trimIndent())
+
+        val result: BuildResult = build("processResources")
+
+        assertThat(result.outcomeOf(":processResources")).isEqualTo(TaskOutcome.SUCCESS)
+
+        val processedHtml = getFile("build/resources/main/bye")
+        assertThat(processedHtml).contains("""<div class="fancy">""")
+        assertThat(processedHtml).doesNotContain("""<div style="font-style: italic;">""")
     }
 }

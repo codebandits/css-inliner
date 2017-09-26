@@ -11,11 +11,13 @@ open class CssInlinerPlugin : Plugin<Project> {
         val extension = target.extensions.create("css-inliner", CssInlinerPluginExtension::class.java)
 
         target.run {
-            tasks {
-                "processResources"(ProcessResources::class) {
-                    filesMatching(extension.filesMatching) {
-                        val css = extension.cssFile?.readText() ?: throw CssFileMissing()
-                        filter(mapOf("css" to css), CSSInlinerFilter::class.java)
+            afterEvaluate {
+                tasks {
+                    "processResources"(ProcessResources::class) {
+                        filesMatching(extension.filesMatching) {
+                            val css = extension.cssFile?.readText() ?: throw CssFileMissing()
+                            filter(mapOf("css" to css), CSSInlinerFilter::class.java)
+                        }
                     }
                 }
             }
