@@ -44,7 +44,7 @@ class CssInlinerPluginTest : BasePluginTest() {
             }
 
             plugins {
-                kotlin("jvm")
+                kotlin("jvm") version "1.2.10"
             }
 
             apply {
@@ -223,7 +223,7 @@ class CssInlinerPluginTest : BasePluginTest() {
             }
 
             plugins {
-                kotlin("jvm")
+                kotlin("jvm") version "1.2.10"
             }
 
             apply {

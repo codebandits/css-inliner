@@ -1,14 +1,14 @@
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    id("com.gradle.plugin-publish") version "0.9.7"
+    id("com.gradle.plugin-publish") version "0.9.9"
 }
 
 dependencies {
     compile(project(":css-inliner"))
     testCompile("org.assertj:assertj-core:3.8.0")
-    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0")
-    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.2")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.2")
 }
 
 data class GradlePlugin(val displayName: String, val id: String, val implementationClass: String)
